@@ -1,3 +1,25 @@
+# Edit Settings.py File
+
+# Change the user, password, database-name
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'djangoRestDatabse',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
+
+Create the database with same name as you mentioned over in the Database Dictionary
+
+# Running the App
+1. python manage.py makemigrations
+2. python manage.py migrate
+3. python manage.py runserver 127.0.0.1:8000
+
 # Registering a User
 POST Request
 
