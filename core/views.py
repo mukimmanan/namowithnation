@@ -33,7 +33,6 @@ class TweetsView(views.APIView):
 
     def get(self, request):
         data = UserTweets.objects.all().order_by("-created_on")
-        # print(request.GET.get('page_size'))
         page = self.pagination_class.paginate_queryset(queryset=data, request=request)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
