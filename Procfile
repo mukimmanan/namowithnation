@@ -1,3 +1,3 @@
-release python manage.py makemigrations core
-release python manage.py migrate core
-web: run-program waitress-serve --port=$PORT settings.wsgi:application
+release python manage.py makemigrations --no-input
+release python manage.py migrate  --no-input
+web: gunicorn nationwithnamo.wsgi
