@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    """ Serializes a user profile object """
+    """ Serializes The User Profile Object """
     class Meta:
         model = get_user_model()
         fields = ('id', 'name', 'email', 'password')
@@ -30,7 +30,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class TweetSerializers(serializers.ModelSerializer):
-
+    """ Serializes Tweet Object """
     class Meta:
         model = UserTweets
         fields = ('user', 'id', 'tweet_text', 'created_on')

@@ -8,23 +8,24 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_403_FORBIDDEN
-from django_filters.rest_framework import DjangoFilterBackend
 from .pagination import TweetsPagination
-from .permissions import OwnTweetViewPermission
 from .serializers import UserRegisterSerializer, TweetSerializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import UserTweets
 
 
 class UserRegisterView(CreateAPIView):
+    """ View For Registering a User """
     serializer_class = UserRegisterSerializer
 
 
 class LoginView(ObtainAuthToken):
+    """ View For Authenticating a User """
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 class TweetsView(views.APIView):
+    """ View For Retrieving And Posting Tweets"""
     serializer_class = TweetSerializers
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -59,14 +60,17 @@ class TweetsView(views.APIView):
 
 
 class OwnTweetsView(views.APIView):
+    """ View For Searching Own Tweets """
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, OwnTweetViewPermission,)
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ['tweet_text']
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         data = get_user_model().objects.filter(id=request.user.id)[0]
-        tweets = data.tweets.filter(tweet_text=request.GET.get('search'))
+
+        if request.GET.get('search') is None:
+            tweets = data.tweets.all()
+        else:
+            tweets = data.tweets.filter(tweet_text__contains=request.GET.get('search'))
         return Response({
             'data': [
                 {
